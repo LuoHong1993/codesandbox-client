@@ -1,0 +1,36 @@
+name: Docs Deployment
+
+on:
+  push:
+    branches:
+      - main
+  # 允许从页面手动运行此工作流
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-22.04 # ubuntu-latest # fix:https://github.com/puppeteer/puppeteer/issues/12818
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 如果未启用lastUpdated，则不需要
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: yarn # 或者 pnpm / yarn
+      - name: 安装node依赖
+        run: yarn install
+      - name: 构建 lerna 内部链接所需的一些包
+        run: yarn build:deps
+      - name: 创建 sandpack 实例
+        run: yarn build:sandpack
+      - name: 上传生产的www目录
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-files
+          path: www
