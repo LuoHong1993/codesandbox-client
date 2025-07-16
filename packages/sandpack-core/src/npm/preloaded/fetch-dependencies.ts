@@ -17,7 +17,7 @@ const VERSION = 2;
 const DEV_URLS = {
   packager:
     'https://xi5p9f7czk.execute-api.eu-west-1.amazonaws.com/dev/packages',
-  bucket: 'https://dev-packager-packages.codesandbox.io',
+  bucket: 'http://127.0.0.1:3000',
 };
 // eslint-disable-next-line
 const PROD_URLS = {
